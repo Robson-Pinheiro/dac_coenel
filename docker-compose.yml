@@ -1,0 +1,69 @@
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    restart: unless-stopped
+    pull_policy: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-superadmin123}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-dacdb}
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  mongo_express:
+    image: mongo-express:1.0.2-20
+    container_name: mongo_express
+    restart: unless-stopped
+    pull_policy: always
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-superadmin123}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME:-root}:${MONGO_INITDB_ROOT_PASSWORD:-superadmin123}@mongo:27017/
+      ME_CONFIG_BASICAUTH: "true"
+      ME_CONFIG_BASICAUTH_USERNAME: ${ME_BASICAUTH_USERNAME:-superadmin@admin.com}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${ME_BASICAUTH_PASSWORD:-superadmin123}
+    depends_on:
+      - mongo
+    ports:
+      - "5002:8081"
+
+  backend:
+    build: ./backend
+    container_name: backend
+    restart: unless-stopped
+    environment:
+      PORT: 5001
+      MONGO_URI: mongodb://${MONGO_INITDB_ROOT_USERNAME:-root}:${MONGO_INITDB_ROOT_PASSWORD:-superadmin123}@mongo:27017/${MONGO_INITDB_DATABASE:-dacdb}?authSource=admin
+      JWT_SECRET: ${JWT_SECRET:-changeme}
+      NODE_ENV: production
+    depends_on:
+      - mongo
+    ports:
+      - "5001:5001"
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    # Serving static files via nginx inside the container on port 80
+    ports:
+      - "5000:80"
+
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: unless-stopped
+    depends_on:
+      - frontend
+      - backend
+      - mongo_express
+    ports:
+      - "5003:5003"
+
+volumes:
+  mongo_data:
