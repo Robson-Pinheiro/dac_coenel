@@ -15,7 +15,7 @@ const password = process.env.SUPERADMIN_PASSWORD || 'superadmin123';
       // Garantir que o SUPERADMIN tenha o papel e parâmetros corretos
       const updates = {};
       if (existing.role !== 'SUPERADMIN') updates.role = 'SUPERADMIN';
-      if (existing.accessLevel < 100) updates.accessLevel = 100;
+  if (existing.accessLevel !== 7) updates.accessLevel = 7;
       if (!existing.active) updates.active = true;
       // Opcional: atualizar senha se SUPERADMIN_PASSWORD mudar
       if (password && password.length >= 6) {
@@ -38,7 +38,7 @@ const password = process.env.SUPERADMIN_PASSWORD || 'superadmin123';
         email,
         passwordHash,
         role: 'SUPERADMIN',
-        accessLevel: 100,
+        accessLevel: 7,
         active: true,
       });
       console.log('SUPERADMIN criado:', email);

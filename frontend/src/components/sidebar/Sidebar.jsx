@@ -27,7 +27,7 @@ export default function Sidebar() {
 				<ul className="nav nav-pills flex-column gap-1">
 					<li className="nav-item">
 						<NavLink to="/dashboard" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
-							<i className="bi bi-blockquote-right me-2" /> Dashboard
+							<i className="bi bi-speedometer2 me-2" /> Dashboard
 						</NavLink>
 					</li>
 					{token && user?.role === 'SUPERADMIN' && (
@@ -39,7 +39,7 @@ export default function Sidebar() {
 					)}
 					{token && (
 						<li className="nav-item">
-							<NavLink to="/profile" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
+							<NavLink to="/perfil" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
 								<i className="bi bi-person-circle me-2" /> Perfil
 							</NavLink>
 						</li>

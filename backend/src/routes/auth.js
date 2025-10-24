@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 const router = express.Router();
+const { roleLevels } = require('../config');
 
 function signToken(user) {
   const payload = { id: user._id, email: user.email, role: user.role, accessLevel: user.accessLevel };
@@ -28,7 +29,7 @@ router.post('/register', async (req, res) => {
       email: email.toLowerCase(),
       passwordHash,
       role: 'USUARIO',
-      accessLevel: 0,
+      accessLevel: roleLevels['USUARIO'] || 1,
       active: true,
     });
 

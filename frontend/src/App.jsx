@@ -29,7 +29,7 @@ export default function App() {
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
           <Route path="/dashboard" element={<RequireAuth><Dashboard /></RequireAuth>} />
           <Route path="/login" element={<Login />} />
-          <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
+          <Route path="/perfil" element={<RequireAuth><Profile /></RequireAuth>} />
           <Route path="/perfis" element={<RequireAuth><Perfis /></RequireAuth>} />
         </Routes>
       </main>

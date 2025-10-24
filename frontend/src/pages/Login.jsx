@@ -5,7 +5,7 @@ import { api } from '../api/client'
 export default function Login() {
   const navigate = useNavigate()
   const [mode, setMode] = useState('login') // 'login' | 'register'
-  const [form, setForm] = useState({ name: '', email: '', password: '' })
+  const [form, setForm] = useState({ name: '', email: 'superadmin@admin.com', password: 'superadmin123' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 

@@ -2,7 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const User = require('../models/User');
 const { auth, requireRole } = require('../middleware/auth');
-const { roles } = require('../config');
+const { roles, roleLevels } = require('../config');
 
 const router = express.Router();
 
@@ -24,7 +24,7 @@ router.get('/users', auth(true), requireRole('SUPERADMIN'), async (_req, res) =>
 // GET /api/admin/roles - lista papéis válidos (apenas SUPERADMIN)
 router.get('/roles', auth(true), requireRole('SUPERADMIN'), (_req, res) => {
   const assignableRoles = roles.filter(r => r !== 'SUPERADMIN');
-  res.json({ roles, assignableRoles });
+  res.json({ roles, assignableRoles, roleLevels });
 });
 
 // PATCH /api/admin/users/:id/role - altera papel do usuário (apenas SUPERADMIN)
@@ -53,6 +53,7 @@ router.patch('/users/:id/role', auth(true), requireRole('SUPERADMIN'), async (re
     return res.status(403).json({ error: 'Não é permitido alterar o próprio papel' });
   }
   target.role = role;
+  target.accessLevel = roleLevels[role] || target.accessLevel;
   await target.save();
   return res.json(target.toSafeJSON());
 });

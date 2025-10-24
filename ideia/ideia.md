@@ -63,3 +63,13 @@ Usuário Local/Setor: consulta consumo do seu setor/unidade.
 Financeiro: acompanha custos, faturas e economias.
 Sensores/Medidores: enviam leituras (IoT/AMI).
 Sistema de Notificações: alerta desvios e oportunidades.
+
+
+## NIVEL DE ACESSO 
+1 USUARIO LOCAL/SETOR 
+2 TECNICO DE MANUTENÇÃO 
+3 GESTOR DE ENERGIA 
+4 FINANCEIRO 
+5 SENSORES/MEDIDORES
+6 SISTEMA DE NOTIFAÇÕES 
+7 SUPERADMIN
