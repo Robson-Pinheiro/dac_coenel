@@ -48,13 +48,23 @@ router.post('/login', async (req, res) => {
       return res.status(400).json({ error: 'email e password são obrigatórios' });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() });
+  const user = await User.findOne({ email: email.toLowerCase() });
     if (!user) return res.status(401).json({ error: 'Credenciais inválidas' });
 
     if (!user.active) return res.status(403).json({ error: 'Perfil inativo' });
 
     const ok = await bcrypt.compare(password, user.passwordHash);
     if (!ok) return res.status(401).json({ error: 'Credenciais inválidas' });
+
+    // Blindagem: se for a conta canônica do SUPERADMIN, garantir papel SUPERADMIN e nível 7
+    const superadminEmail = (process.env.SUPERADMIN_EMAIL || 'superadmin@admin.com').toLowerCase();
+    if (user.email.toLowerCase() === superadminEmail) {
+      let needsSave = false;
+      if (user.role !== 'SUPERADMIN') { user.role = 'SUPERADMIN'; needsSave = true; }
+      if (user.accessLevel !== 7) { user.accessLevel = 7; needsSave = true; }
+      if (!user.active) { user.active = true; needsSave = true; }
+      if (needsSave) await user.save();
+    }
 
     const token = signToken(user);
     return res.json({ token, user: user.toSafeJSON() });

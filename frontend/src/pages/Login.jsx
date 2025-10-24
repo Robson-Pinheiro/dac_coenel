@@ -8,6 +8,7 @@ export default function Login() {
   const [form, setForm] = useState({ name: '', email: 'superadmin@admin.com', password: 'superadmin123' })
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [showInactive, setShowInactive] = useState(false)
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -28,9 +29,13 @@ export default function Login() {
       }
       localStorage.setItem('token', data.token)
       localStorage.setItem('user', JSON.stringify(data.user))
-      navigate('/profile')
+      navigate('/dashboard')
     } catch (err) {
-      setError(err.data?.error || err.message)
+      const msg = err.data?.error || err.message
+      setError(msg)
+      if (msg === 'Perfil inativo') {
+        setShowInactive(true)
+      }
     } finally {
       setLoading(false)
     }
@@ -69,6 +74,25 @@ export default function Login() {
             </form>
           </div>
         </div>
+        {/* Modal de perfil desativado */}
+        {showInactive && (
+          <div className="modal fade show" style={{ display: 'block', background: 'rgba(0,0,0,.5)' }}>
+            <div className="modal-dialog">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">Acesso bloqueado</h5>
+                  <button type="button" className="btn-close" onClick={() => setShowInactive(false)} />
+                </div>
+                <div className="modal-body">
+                  <p className="mb-0">PERFIL DESATIVADO PELO SUPERADMIN</p>
+                </div>
+                <div className="modal-footer">
+                  <button type="button" className="btn btn-primary" onClick={() => setShowInactive(false)}>OK</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

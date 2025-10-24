@@ -73,3 +73,9 @@ Sistema de Notificações: alerta desvios e oportunidades.
 5 SENSORES/MEDIDORES
 6 SISTEMA DE NOTIFAÇÕES 
 7 SUPERADMIN
+
+## REGRAS 
+Existirá os links
+/dashboard
+/ações
+/

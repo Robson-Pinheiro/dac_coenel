@@ -3,7 +3,6 @@ services:
     image: mongo:6
     container_name: mongo
     restart: unless-stopped
-    pull_policy: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-superadmin123}
@@ -17,7 +16,6 @@ services:
     image: mongo-express:1.0.2-20
     container_name: mongo_express
     restart: unless-stopped
-    pull_policy: always
     environment:
       ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
       ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-superadmin123}
